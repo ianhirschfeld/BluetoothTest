@@ -40,7 +40,7 @@ class BTPeripheralManager: NSObject, CBPeripheralManagerDelegate {
     service = CBMutableService(type: serviceUUID, primary: true)
 
     for UUID in characteristicUUIDs {
-      let characteristic = CBMutableCharacteristic(type: UUID, properties: CBCharacteristicProperties.Read|CBCharacteristicProperties.Notify, value: nil, permissions: CBAttributePermissions.Readable)
+      var characteristic = CBMutableCharacteristic(type: UUID, properties: CBCharacteristicProperties.Notify, value: nil, permissions: nil)
       characteristics.append(characteristic)
     }
     service.characteristics = characteristics
@@ -62,7 +62,7 @@ class BTPeripheralManager: NSObject, CBPeripheralManagerDelegate {
     }
 
     let advertisement = [
-      CBAdvertisementDataServiceUUIDsKey: [serviceUUID],
+      CBAdvertisementDataServiceUUIDsKey: [service.UUID],
       CBAdvertisementDataLocalNameKey: UIDevice.currentDevice().name
     ]
 

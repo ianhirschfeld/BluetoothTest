@@ -90,7 +90,7 @@ class BTConnection: NSObject, CBPeripheralDelegate {
       return
     }
 
-    println("didDiscoverServices")
+    println("didDiscoverServices: \(peripheral.services.count)")
     for s in peripheral.services {
       let service: CBService = s as CBService
       if find(services, service) == nil {
@@ -108,9 +108,9 @@ class BTConnection: NSObject, CBPeripheralDelegate {
     }
 
     println("didDiscoverCharacteristicsForService: \(service.characteristics.count)")
-//    if subscribeWhenReady {
-//      subscibe()
-//    }
+    if subscribeWhenReady {
+      subscribe(service)
+    }
   }
 
 }
