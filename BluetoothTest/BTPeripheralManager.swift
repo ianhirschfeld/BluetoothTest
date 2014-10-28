@@ -14,6 +14,7 @@ class BTPeripheralManager: NSObject, CBPeripheralManagerDelegate {
   // Properties
   var characteristicUUIDs = [CBUUID]()
   var characteristics = [CBMutableCharacteristic]()
+  var pendingData = [[String: AnyObject]]()
 
   var delegate: BTPeripheralDelegate!
   var manager: CBPeripheralManager!
@@ -73,6 +74,20 @@ class BTPeripheralManager: NSObject, CBPeripheralManagerDelegate {
     manager.stopAdvertising()
   }
 
+  func sendData(characteristic: CBMutableCharacteristic, data: NSData) {
+    var wasSuccess: Bool = manager.updateValue(data, forCharacteristic: characteristic, onSubscribedCentrals: nil)
+
+    if !wasSuccess {
+      println("data not sent for: \(characteristic.UUID)")
+      pendingData.append([
+        "characteristic": characteristic,
+        "data": data
+      ])
+    } else {
+      println("data SENT for: \(characteristic.UUID)")
+    }
+  }
+
   // ==================================================
   // PERIPHERAL MANAGER DELEGATE
   // ==================================================
@@ -107,6 +122,13 @@ class BTPeripheralManager: NSObject, CBPeripheralManagerDelegate {
   func peripheralManager(peripheral: CBPeripheralManager!, central: CBCentral!, didSubscribeToCharacteristic characteristic: CBCharacteristic!) {
     println("Central has subscribed to: \(characteristic.UUID)")
     delegate.didSubscribe()
+  }
+
+  func peripheralManagerIsReadyToUpdateSubscribers(peripheral: CBPeripheralManager!) {
+    for i in 0..<pendingData.count {
+      let item: [String: AnyObject] = pendingData.removeLast()
+      sendData(item["characteristic"] as CBMutableCharacteristic, data: item["data"] as NSData)
+    }
   }
 
 }

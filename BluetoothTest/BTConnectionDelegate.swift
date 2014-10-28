@@ -13,5 +13,6 @@ protocol BTConnectionDelegate {
   func didDiscoverServices()
   func didSubscribe()
   func didUnsubscribe()
+  func didUpdateValue(characteristic: CBCharacteristic)
 
 }

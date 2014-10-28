@@ -89,6 +89,7 @@ class CentralManagerViewController: UIViewController, BTCentralDelegate, BTConne
 
   func didSubscribe() {}
   func didUnsubscribe() {}
+  func didUpdateValue(characteristic: CBCharacteristic) {}
 
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "centralSegue" {

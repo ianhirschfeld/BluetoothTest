@@ -19,30 +19,24 @@ class PeripheralViewController: UIViewController, UITextFieldDelegate, UITextVie
   override func viewDidLoad() {
     super.viewDidLoad()
 
-//    if let name = (btManager.services[0].characteristics[0] as CBCharacteristic).value {
-//      tfName.text = NSString(data: name, encoding: NSUTF8StringEncoding)
-//    }
-//
-//    if let bio = (btManager.services[0].characteristics[1] as CBCharacteristic).value {
-//      tvBio.text = NSString(data: bio, encoding: NSUTF8StringEncoding)
-//    }
+    if let name = btpm.characteristics[0].value {
+      tfName.text = NSString(data: name, encoding: NSUTF8StringEncoding)
+    }
+
+    if let bio = btpm.characteristics[1].value {
+      tvBio.text = NSString(data: bio, encoding: NSUTF8StringEncoding)
+    }
 
     let tapGesture = UITapGestureRecognizer(target: self, action: "closeKeyboard")
     view.addGestureRecognizer(tapGesture)
   }
 
   @IBAction func updatePress(sender: UIButton) {
-//    var nameData: NSData = tfName.text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-//    var didSendName: Bool = btManager.peripheralManager.updateValue(nameData, forCharacteristic: btManager.services[0].characteristics[0] as CBMutableCharacteristic, onSubscribedCentrals: nil)
-//    if didSendName {
-//      (parentViewController as? ViewController)?.log("Name updated and sent.")
-//    }
-//
-//    var bioData: NSData = tvBio.text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-//    var didSendBio: Bool = btManager.peripheralManager.updateValue(bioData, forCharacteristic: btManager.services[0].characteristics[2] as CBMutableCharacteristic, onSubscribedCentrals: nil)
-//    if didSendBio {
-//      (parentViewController as? ViewController)?.log("Bio updated and sent.")
-//    }
+    let nameData: NSData = tfName.text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+    btpm.sendData(btpm.characteristics[0], data: nameData)
+
+    let bioData: NSData = tvBio.text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+    btpm.sendData(btpm.characteristics[1], data: bioData)
   }
 
   override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

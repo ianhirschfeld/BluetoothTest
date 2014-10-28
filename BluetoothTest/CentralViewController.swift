@@ -37,4 +37,14 @@ class CentralViewController: UIViewController, BTConnectionDelegate {
     println("Unsubscribed!")
   }
 
+  func didUpdateValue(characteristic: CBCharacteristic) {
+    let value = NSString(data: characteristic.value, encoding: NSUTF8StringEncoding)
+
+    if characteristic.UUID == characteristciPlayerNameUUID {
+      lblPlayerName.text = value
+    } else if characteristic.UUID == characteristciPlayerBioUUID {
+      tvPlayerBio.text = value
+    }
+  }
+
 }

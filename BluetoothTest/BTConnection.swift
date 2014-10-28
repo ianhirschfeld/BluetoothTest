@@ -113,4 +113,20 @@ class BTConnection: NSObject, CBPeripheralDelegate {
     }
   }
 
+  func peripheral(peripheral: CBPeripheral!, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
+    if error != nil {
+      println("didUpdateNotificationStateForCharacteristic error: \(characteristic.UUID) -  \(error.localizedDescription)")
+      return
+    }
+  }
+
+  func peripheral(peripheral: CBPeripheral!, didUpdateValueForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
+    if error != nil {
+      println("didUpdateValueForCharacteristic error: \(characteristic.UUID) -  \(error.localizedDescription)")
+      return
+    }
+
+    delegate.didUpdateValue(characteristic)
+  }
+
 }
